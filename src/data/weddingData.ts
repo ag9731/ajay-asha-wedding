@@ -11,6 +11,7 @@ export interface WeddingEvent {
   description: string;
   iconName: string;
   dressCode?: string;
+  customNote?: string;
 }
 
 export interface GalleryItem {
@@ -109,7 +110,7 @@ export const WEDDING_DATA = {
       venueAddress: "Amargol, Behind Volkswagen Car Showroom, Hubballi – 580031",
       description: "An evening of celebration, traditional feasts, melodies, and joyous blessings with both families.",
       iconName: "Sparkles",
-      dressCode: "Royal Ethnic / Indo-Western"
+      customNote: "Your Presence, Our Happiness"
     }
   ],
 
