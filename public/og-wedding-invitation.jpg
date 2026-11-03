@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#5B0E1E"/>
+      <stop offset="60%" stop-color="#2A0812"/>
+      <stop offset="100%" stop-color="#150307"/>
+    </radialGradient>
+    <linearGradient id="goldText" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3C4"/>
+      <stop offset="40%" stop-color="#E8C15A"/>
+      <stop offset="70%" stop-color="#B38B3F"/>
+      <stop offset="100%" stop-color="#F5DF88"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect x="30" y="30" width="1140" height="570" rx="20" fill="none" stroke="#D4AF37" stroke-width="2" stroke-opacity="0.6"/>
+  <rect x="45" y="45" width="1110" height="540" rx="15" fill="none" stroke="#D4AF37" stroke-width="1" stroke-dasharray="6 4" stroke-opacity="0.4"/>
+
+  <text x="600" y="110" font-family="'Cinzel', serif, Arial" font-size="20" font-weight="600" fill="#D4AF37" text-anchor="middle" letter-spacing="4">॥ श्री गणेशाय नमः ॥</text>
+  <text x="600" y="145" font-family="'Cinzel', serif, Arial" font-size="16" fill="#F7E7CE" text-anchor="middle" letter-spacing="6">WITH THE BLESSINGS OF LORD GANESHA</text>
+
+  <text x="600" y="210" font-family="'Cinzel', serif, Arial" font-size="28" font-weight="700" fill="url(#goldText)" text-anchor="middle" letter-spacing="6">GORAVANAKOLL FAMILY  &amp;  RATIMANI FAMILY</text>
+  <text x="600" y="255" font-family="'Poppins', sans-serif, Arial" font-size="18" fill="#F7E7CE" text-anchor="middle" letter-spacing="2">cordially invite you to celebrate the wedding of</text>
+
+  <text x="600" y="360" font-family="'Playfair Display', serif, Georgia" font-size="76" font-weight="900" fill="url(#goldText)" text-anchor="middle" letter-spacing="4">AJAY  ♥  ASHA</text>
+  <text x="600" y="415" font-family="'Cinzel', serif, Arial" font-size="18" font-weight="600" fill="#FFDF73" text-anchor="middle" letter-spacing="8">WHERE HOPE MEETS VICTORY</text>
+
+  <text x="600" y="485" font-family="'Cinzel', serif, Arial" font-size="22" font-weight="700" fill="#FFF3C4" text-anchor="middle" letter-spacing="4">SUNDAY, 29 NOVEMBER 2026 • MUHURTHAM 12:31 PM</text>
+  <text x="600" y="525" font-family="'Poppins', sans-serif, Arial" font-size="18" fill="#F7E7CE" text-anchor="middle" letter-spacing="2">Vidyadhiraj Bhavan, Amargol, Hubballi</text>
+</svg>
+
