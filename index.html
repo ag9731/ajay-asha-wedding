@@ -33,7 +33,44 @@
   </head>
   <body class="bg-burgundy-950 text-ivory-100 antialiased selection:bg-gold selection:text-burgundy-950 overflow-x-hidden">
     <div id="root"></div>
+
+    <!-- Background Music Audio Element for immediate autoplay on link open -->
+    <audio id="wedding-bgm" src="/audio/bgm.mp3" loop preload="auto" playsinline></audio>
+    <script>
+      (function() {
+        const bgm = document.getElementById('wedding-bgm');
+        if (!bgm) return;
+        bgm.volume = 0.65;
+
+        function attemptPlay() {
+          if (!bgm.paused) return;
+          bgm.play().then(function() {
+            cleanup();
+          }).catch(function() {
+            // Autoplay waiting for user gesture
+          });
+        }
+
+        function cleanup() {
+          ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'scroll', 'keydown'].forEach(function(evt) {
+            window.removeEventListener(evt, attemptPlay);
+            document.removeEventListener(evt, attemptPlay);
+          });
+        }
+
+        // Try playing immediately on load
+        attemptPlay();
+        document.addEventListener('DOMContentLoaded', attemptPlay, { once: true });
+        window.addEventListener('load', attemptPlay, { once: true });
+
+        // Play on ANY touch, click, or scroll anywhere on the screen
+        ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'scroll', 'keydown'].forEach(function(evt) {
+          window.addEventListener(evt, attemptPlay, { passive: true });
+          document.addEventListener(evt, attemptPlay, { passive: true });
+        });
+      })();
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

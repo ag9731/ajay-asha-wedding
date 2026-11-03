@@ -1,4 +1,3 @@
-// Auspicious Wedding Background Music (User BGM)
 const WEDDING_MUSIC_URL = '/audio/bgm.mp3';
 
 class WeddingAudioManager {
@@ -6,20 +5,31 @@ class WeddingAudioManager {
   private isPlaying: boolean = false;
   private isMuted: boolean = false;
   private listeners: Set<(isPlaying: boolean, isMuted: boolean) => void> = new Set();
-  private gestureListenersAttached: boolean = false;
 
   constructor() {
     if (typeof window !== 'undefined') {
-      this.initAudio();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.initAudio(), { once: true });
+      } else {
+        this.initAudio();
+      }
     }
   }
 
   private initAudio() {
     try {
-      this.audio = new Audio(WEDDING_MUSIC_URL);
-      this.audio.loop = true;
-      this.audio.volume = 0.65;
-      this.audio.preload = 'auto';
+      const existing = document.getElementById('wedding-bgm') as HTMLAudioElement | null;
+      if (existing) {
+        this.audio = existing;
+      } else {
+        this.audio = new Audio(WEDDING_MUSIC_URL);
+        this.audio.loop = true;
+        this.audio.preload = 'auto';
+        this.audio.volume = 0.65;
+        document.body.appendChild(this.audio);
+      }
+
+      this.isPlaying = !this.audio.paused;
 
       this.audio.addEventListener('play', () => {
         this.isPlaying = true;
@@ -31,41 +41,30 @@ class WeddingAudioManager {
         this.notify();
       });
 
-      this.audio.addEventListener('ended', () => {
-        this.isPlaying = false;
-        this.notify();
+      this.audio.addEventListener('volumechange', () => {
+        if (this.audio) {
+          this.isMuted = this.audio.muted;
+          this.notify();
+        }
       });
 
-      // Attempt immediate autoplay on load
+      // Try playing immediately
       this.playMusic();
-      this.attachGestureListeners();
     } catch (e) {
-      console.warn('Audio initialization deferred:', e);
+      console.warn('Audio initialization:', e);
     }
-  }
-
-  private attachGestureListeners() {
-    if (typeof window === 'undefined' || this.gestureListenersAttached) return;
-    this.gestureListenersAttached = true;
-
-    const startOnInteraction = () => {
-      this.playMusic();
-    };
-
-    ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach((eventName) => {
-      window.addEventListener(eventName, startOnInteraction, { once: true, passive: true });
-    });
   }
 
   public playMusic(): Promise<void> {
-    if (!this.audio) {
-      if (typeof window !== 'undefined') {
-        this.initAudio();
-      }
-      if (!this.audio) return Promise.resolve();
+    if (!this.audio && typeof document !== 'undefined') {
+      this.initAudio();
     }
-
-    if (this.isPlaying) return Promise.resolve();
+    if (!this.audio) return Promise.resolve();
+    if (!this.audio.paused) {
+      this.isPlaying = true;
+      this.notify();
+      return Promise.resolve();
+    }
 
     return this.audio
       .play()
@@ -74,7 +73,6 @@ class WeddingAudioManager {
         this.notify();
       })
       .catch(() => {
-        // Autoplay without user interaction blocked by browser security policy
         this.isPlaying = false;
         this.notify();
       });
@@ -89,39 +87,41 @@ class WeddingAudioManager {
   }
 
   public togglePlay() {
-    if (this.isPlaying) {
-      this.pauseMusic();
-    } else {
-      this.playMusic();
+    if (this.audio) {
+      if (this.audio.paused) {
+        this.playMusic();
+      } else {
+        this.pauseMusic();
+      }
     }
   }
 
   public toggleMute() {
-    this.isMuted = !this.isMuted;
     if (this.audio) {
+      this.isMuted = !this.isMuted;
       this.audio.muted = this.isMuted;
+      this.notify();
     }
-    this.notify();
   }
 
   public getIsPlaying(): boolean {
-    return this.isPlaying;
+    return this.audio ? !this.audio.paused : this.isPlaying;
   }
 
   public getIsMuted(): boolean {
-    return this.isMuted;
+    return this.audio ? this.audio.muted : this.isMuted;
   }
 
   public subscribe(callback: (isPlaying: boolean, isMuted: boolean) => void) {
     this.listeners.add(callback);
-    callback(this.isPlaying, this.isMuted);
+    callback(this.getIsPlaying(), this.getIsMuted());
     return () => {
       this.listeners.delete(callback);
     };
   }
 
   private notify() {
-    this.listeners.forEach((listener) => listener(this.isPlaying, this.isMuted));
+    this.listeners.forEach((listener) => listener(this.getIsPlaying(), this.getIsMuted()));
   }
 }
 

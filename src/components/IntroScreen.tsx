@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GaneshaSVG, HangingBellSVG, MandalaSVG, OrnamentalDivider } from './DecorativeSVGs';
 import { audioManager } from '../utils/audioManager';
-import { Sparkles, Music, Volume2 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface IntroScreenProps {
   onOpen: () => void;
@@ -10,43 +10,34 @@ interface IntroScreenProps {
 
 export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
   const [isOpening, setIsOpening] = useState(false);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   useEffect(() => {
-    const unsub = audioManager.subscribe((playing) => {
-      setIsPlaying(playing);
-    });
-
-    // Try starting music immediately on mount
+    // Attempt automatic playback as soon as intro screen mounts
     audioManager.playMusic();
 
-    // Attach interaction fallback listeners to window
-    const handleGesture = () => {
+    const handleFirstTouch = () => {
       audioManager.playMusic();
     };
 
-    window.addEventListener('click', handleGesture, { once: true, passive: true });
-    window.addEventListener('touchstart', handleGesture, { once: true, passive: true });
-    window.addEventListener('pointerdown', handleGesture, { once: true, passive: true });
+    window.addEventListener('click', handleFirstTouch, { once: true, passive: true });
+    window.addEventListener('touchstart', handleFirstTouch, { once: true, passive: true });
+    window.addEventListener('pointerdown', handleFirstTouch, { once: true, passive: true });
 
     return () => {
-      unsub();
-      window.removeEventListener('click', handleGesture);
-      window.removeEventListener('touchstart', handleGesture);
-      window.removeEventListener('pointerdown', handleGesture);
+      window.removeEventListener('click', handleFirstTouch);
+      window.removeEventListener('touchstart', handleFirstTouch);
+      window.removeEventListener('pointerdown', handleFirstTouch);
     };
   }, []);
 
   const handleOpenInvitation = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsOpening(true);
-    // Ensure BGM plays immediately
     audioManager.playMusic();
 
-    // Trigger parent open callback
     setTimeout(() => {
       onOpen();
-    }, 700);
+    }, 600);
   };
 
   return (
@@ -66,30 +57,6 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
         >
           {/* Subtle Ambient Radial Lighting */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(212,175,55,0.18)_0%,transparent_65%)] pointer-events-none" />
-
-          {/* Top-Right Music Status Badge */}
-          <div className="absolute top-4 right-4 z-20">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                audioManager.togglePlay();
-              }}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-burgundy-900/90 border border-gold/40 text-gold-light hover:border-gold hover:text-white shadow-xl backdrop-blur-md transition-all active:scale-95"
-              title="Toggle Wedding Music"
-            >
-              <Music className={`w-3.5 h-3.5 ${isPlaying ? 'text-gold' : 'text-gold-light'}`} />
-              <span className="text-[11px] font-cinzel font-semibold tracking-wider">
-                {isPlaying ? 'Music Playing' : 'Play Music'}
-              </span>
-              {isPlaying && (
-                <span className="flex items-end gap-0.5 h-3">
-                  <span className="w-0.5 bg-gold rounded-full h-2 animate-[pulse_0.6s_ease-in-out_infinite]" />
-                  <span className="w-0.5 bg-gold-light rounded-full h-3 animate-[pulse_0.8s_ease-in-out_infinite]" />
-                  <span className="w-0.5 bg-gold rounded-full h-1.5 animate-[pulse_0.7s_ease-in-out_infinite]" />
-                </span>
-              )}
-            </button>
-          </div>
 
           {/* Gentle rotating background mandala watermark */}
           <motion.div
@@ -134,10 +101,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.3, ease: 'easeOut' }}
-            onClick={(e) => {
-              // Clicking anywhere on card ensures music starts
-              audioManager.playMusic();
-            }}
+            onClick={() => audioManager.playMusic()}
             className="relative w-full max-w-xl p-6 sm:p-10 md:p-12 text-center rounded-2xl border border-gold/40 bg-burgundy-950/85 backdrop-blur-md shadow-[0_0_60px_rgba(212,175,55,0.22)]"
           >
             {/* Ornamental Corners */}
@@ -234,12 +198,9 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
                   <Sparkles className="w-4 h-4 ml-2 text-burgundy-900 group-hover:-rotate-12 transition-transform duration-300" />
                 </button>
 
-                <div className="flex items-center justify-center gap-1.5 mt-3 text-gold/80 text-xs font-poppins">
-                  <Volume2 className="w-3.5 h-3.5 text-gold animate-pulse" />
-                  <span>
-                    {isPlaying ? 'Wedding melodies playing' : 'Tap anywhere to start wedding music'}
-                  </span>
-                </div>
+                <p className="text-[11px] text-gold/75 mt-3 font-poppins tracking-wider">
+                  Tap to unveil the wedding celebration
+                </p>
               </motion.div>
             </div>
           </motion.div>
