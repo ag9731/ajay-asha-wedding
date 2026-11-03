@@ -48,6 +48,11 @@ class WeddingAudioManager {
         }
       });
 
+      window.addEventListener('wedding-bgm-play', () => {
+        this.isPlaying = true;
+        this.notify();
+      });
+
       // Try playing immediately
       this.playMusic();
     } catch (e) {

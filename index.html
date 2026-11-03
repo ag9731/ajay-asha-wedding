@@ -44,27 +44,33 @@
 
         function attemptPlay() {
           if (!bgm.paused) return;
-          bgm.play().then(function() {
-            cleanup();
-          }).catch(function() {
-            // Autoplay waiting for user gesture
-          });
+          const promise = bgm.play();
+          if (promise !== undefined) {
+            promise.then(function() {
+              window.dispatchEvent(new CustomEvent('wedding-bgm-play'));
+              cleanup();
+            }).catch(function() {
+              // Waiting for interaction if blocked by browser policy
+            });
+          }
         }
 
+        const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'scroll', 'wheel', 'keydown', 'focus'];
+
         function cleanup() {
-          ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'scroll', 'keydown'].forEach(function(evt) {
+          events.forEach(function(evt) {
             window.removeEventListener(evt, attemptPlay);
             document.removeEventListener(evt, attemptPlay);
           });
         }
 
-        // Try playing immediately on load
+        // Try playing immediately
         attemptPlay();
-        document.addEventListener('DOMContentLoaded', attemptPlay, { once: true });
-        window.addEventListener('load', attemptPlay, { once: true });
+        document.addEventListener('DOMContentLoaded', attemptPlay);
+        window.addEventListener('load', attemptPlay);
+        window.addEventListener('focus', attemptPlay);
 
-        // Play on ANY touch, click, or scroll anywhere on the screen
-        ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'scroll', 'keydown'].forEach(function(evt) {
+        events.forEach(function(evt) {
           window.addEventListener(evt, attemptPlay, { passive: true });
           document.addEventListener(evt, attemptPlay, { passive: true });
         });
