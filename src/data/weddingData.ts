@@ -30,7 +30,7 @@ export const WEDDING_DATA = {
     description: "Strength, integrity, and warmth. A visionary embarking on the greatest journey of love and togetherness.",
     family: "GORAVANAKOLL FAMILY",
     parents: "Sri & Smt. Goravanakoll",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+    image: "/images/ajay.jpg",
   },
   bride: {
     firstName: "ASHA",
@@ -40,7 +40,7 @@ export const WEDDING_DATA = {
     description: "Grace, radiance, and compassion. Bringing boundless hope and joy into this sacred bond of eternity.",
     family: "RATIMANI FAMILY",
     parents: "Sri & Smt. Ratimani",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+    image: "/images/asha.jpg",
   },
   couplesNames: "Ajay & Asha",
   tagline: "Where Hope Meets Victory",

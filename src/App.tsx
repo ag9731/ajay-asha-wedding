@@ -9,10 +9,8 @@ import { Countdown } from './components/Countdown';
 import { CoupleSection } from './components/CoupleSection';
 import { WeddingDetails } from './components/WeddingDetails';
 import { VenueSection } from './components/VenueSection';
-import { RSVPForm } from './components/RSVPForm';
 import { WhatsAppShare } from './components/WhatsAppShare';
 import { CalendarButton } from './components/CalendarButton';
-import { Gallery } from './components/Gallery';
 import { FinalSection } from './components/FinalSection';
 import { Footer } from './components/Footer';
 import { MusicPlayer } from './components/MusicPlayer';
@@ -61,6 +59,9 @@ export const App: React.FC = () => {
           <meta name="twitter:image" content="/og-wedding-invitation.jpg" />
         </Helmet>
 
+        {/* Persistent Floating Music Controller - Active from the start */}
+        <MusicPlayer />
+
         {/* Cinematic Intro Screen */}
         {!hasOpenedInvitation ? (
           <IntroScreen onOpen={() => setHasOpenedInvitation(true)} />
@@ -69,19 +70,14 @@ export const App: React.FC = () => {
             {/* Falling Floral Petals Effect */}
             <FloatingPetals />
 
-            {/* Persistent Floating Music Controller */}
-            <MusicPlayer />
-
             {/* Main Wedding Invitation Sections */}
             <HeroSection />
             <Countdown />
             <CoupleSection />
             <WeddingDetails />
             <VenueSection />
-            <RSVPForm />
             <WhatsAppShare />
             <CalendarButton />
-            <Gallery />
             <FinalSection />
             <Footer />
           </main>

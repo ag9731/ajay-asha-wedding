@@ -66,41 +66,24 @@ export const CoupleSection: React.FC = () => {
             {/* Groom Image Frame */}
             <div className="relative mb-6">
               {/* Outer Decorative Ring */}
-              <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full p-2 border-2 border-dashed border-gold/60 group-hover:border-gold transition-colors duration-500 flex items-center justify-center">
+              <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full p-2 border-2 border-dashed border-gold/60 group-hover:border-gold transition-colors duration-500 flex items-center justify-center">
                 <div className="w-full h-full rounded-full overflow-hidden border-2 border-gold shadow-2xl relative">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80"
+                    src={WEDDING_DATA.groom.image}
                     alt="Ajay - Groom"
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-108"
+                    className="w-full h-full object-cover object-[center_12%] transition-transform duration-700 group-hover:scale-108"
                     loading="lazy"
                   />
                   {/* Subtle warm overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-burgundy-950/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-burgundy-950/30 to-transparent pointer-events-none" />
                 </div>
-              </div>
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-burgundy-900 border border-gold text-[10px] font-cinzel text-gold font-bold tracking-wider uppercase">
-                Victory
               </div>
             </div>
 
-            {/* Name & Meaning */}
+            {/* Name */}
             <h3 className="font-playfair text-3xl sm:text-4xl font-bold text-gold-gradient tracking-wide mb-1">
               {WEDDING_DATA.groom.firstName}
             </h3>
-
-            <div className="text-xs sm:text-sm font-cinzel text-gold-light tracking-[0.2em] uppercase font-semibold mb-2">
-              {WEDDING_DATA.groom.symbolMeaning}
-            </div>
-
-            <p className="font-cinzel text-xs text-champagne/90 tracking-widest uppercase font-bold mb-3">
-              Son of {WEDDING_DATA.groom.parents}
-              <br />
-              <span className="text-gold-light">{WEDDING_DATA.groom.family}</span>
-            </p>
-
-            <p className="font-poppins text-xs sm:text-sm text-champagne-light/80 leading-relaxed max-w-sm mt-1">
-              {WEDDING_DATA.groom.description}
-            </p>
           </motion.div>
 
           {/* Bride Card: ASHA */}
@@ -125,41 +108,24 @@ export const CoupleSection: React.FC = () => {
             {/* Bride Image Frame */}
             <div className="relative mb-6">
               {/* Outer Decorative Ring */}
-              <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full p-2 border-2 border-dashed border-gold/60 group-hover:border-gold transition-colors duration-500 flex items-center justify-center">
+              <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full p-2 border-2 border-dashed border-gold/60 group-hover:border-gold transition-colors duration-500 flex items-center justify-center">
                 <div className="w-full h-full rounded-full overflow-hidden border-2 border-gold shadow-2xl relative">
                   <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
+                    src={WEDDING_DATA.bride.image}
                     alt="Asha - Bride"
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-108"
+                    className="w-full h-full object-cover object-[center_16%] transition-transform duration-700 group-hover:scale-108"
                     loading="lazy"
                   />
                   {/* Subtle warm overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-burgundy-950/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-burgundy-950/30 to-transparent pointer-events-none" />
                 </div>
-              </div>
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-burgundy-900 border border-gold text-[10px] font-cinzel text-gold font-bold tracking-wider uppercase">
-                Hope
               </div>
             </div>
 
-            {/* Name & Meaning */}
+            {/* Name */}
             <h3 className="font-playfair text-3xl sm:text-4xl font-bold text-gold-gradient tracking-wide mb-1">
               {WEDDING_DATA.bride.firstName}
             </h3>
-
-            <div className="text-xs sm:text-sm font-cinzel text-gold-light tracking-[0.2em] uppercase font-semibold mb-2">
-              {WEDDING_DATA.bride.symbolMeaning}
-            </div>
-
-            <p className="font-cinzel text-xs text-champagne/90 tracking-widest uppercase font-bold mb-3">
-              Daughter of {WEDDING_DATA.bride.parents}
-              <br />
-              <span className="text-gold-light">{WEDDING_DATA.bride.family}</span>
-            </p>
-
-            <p className="font-poppins text-xs sm:text-sm text-champagne-light/80 leading-relaxed max-w-sm mt-1">
-              {WEDDING_DATA.bride.description}
-            </p>
           </motion.div>
         </div>
 

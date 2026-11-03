@@ -1,8 +1,7 @@
 import { Howl } from 'howler';
 
-// Royalty-free Indian classical instrumental wedding music (sitar & flute raga)
-// We provide high-quality hosted audio with graceful Web Audio synthesizer fallback
-const WEDDING_MUSIC_URL = 'https://assets.mixkit.co/music/preview/mixkit-indian-feast-528.mp3';
+// Auspicious Wedding Background Music (User BGM)
+const WEDDING_MUSIC_URL = '/audio/bgm.mp3';
 const CHIME_SOUND_URL = 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3';
 
 class WeddingAudioManager {
@@ -15,6 +14,29 @@ class WeddingAudioManager {
 
   constructor() {
     this.initHowler();
+    this.setupAutoPlayOnStart();
+  }
+
+  private setupAutoPlayOnStart() {
+    if (typeof window === 'undefined') return;
+
+    const startAudioOnGesture = () => {
+      this.playMusic();
+      window.removeEventListener('click', startAudioOnGesture);
+      window.removeEventListener('touchstart', startAudioOnGesture);
+      window.removeEventListener('keydown', startAudioOnGesture);
+    };
+
+    window.addEventListener('click', startAudioOnGesture, { once: true });
+    window.addEventListener('touchstart', startAudioOnGesture, { once: true });
+    window.addEventListener('keydown', startAudioOnGesture, { once: true });
+
+    // Try playing immediately if browser allows unprompted audio
+    setTimeout(() => {
+      if (this.musicHowl && !this.isPlaying) {
+        this.playMusic();
+      }
+    }, 400);
   }
 
   private initHowler() {
