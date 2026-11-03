@@ -55,16 +55,6 @@ class WeddingAudioManager {
 
       // Try playing immediately
       this.playMusic();
-
-      // Fallback listener on first user gesture anywhere
-      const onUserInteraction = () => {
-        if (this.audio && this.audio.paused) {
-          this.playMusic();
-        }
-      };
-      window.addEventListener('pointerdown', onUserInteraction, { once: true, capture: true, passive: true });
-      window.addEventListener('touchstart', onUserInteraction, { once: true, capture: true, passive: true });
-      window.addEventListener('scroll', onUserInteraction, { once: true, capture: true, passive: true });
     } catch (e) {
       console.warn('Audio initialization:', e);
     }
