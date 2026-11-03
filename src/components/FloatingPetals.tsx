@@ -13,7 +13,7 @@ interface Petal {
 export const FloatingPetals: React.FC = () => {
   // Generate stable random petals
   const petals = useMemo<Petal[]>(() => {
-    return Array.from({ length: 5 }, (_, i) => ({
+    return Array.from({ length: 4 }, (_, i) => ({
       id: i,
       left: Math.random() * 96 + 2, // 2% to 98%
       animationDuration: 9 + Math.random() * 9, // 9 to 18 seconds
