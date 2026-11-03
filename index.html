@@ -35,7 +35,7 @@
     <div id="root"></div>
 
     <!-- Background Music Audio Element for immediate autoplay on link open -->
-    <audio id="wedding-bgm" src="/audio/bgm.mp3" loop preload="auto" playsinline></audio>
+    <audio id="wedding-bgm" src="/audio/bgm.mp3" autoplay loop preload="auto" playsinline></audio>
     <script>
       (function() {
         const bgm = document.getElementById('wedding-bgm');
@@ -55,7 +55,7 @@
           }
         }
 
-        const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'scroll', 'wheel', 'keydown', 'focus'];
+        const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'mousemove', 'pointermove', 'scroll', 'wheel', 'keydown', 'focus'];
 
         function cleanup() {
           events.forEach(function(evt) {
