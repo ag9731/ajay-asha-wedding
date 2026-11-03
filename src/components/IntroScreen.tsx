@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GaneshaSVG, HangingBellSVG, MandalaSVG, OrnamentalDivider } from './DecorativeSVGs';
 import { audioManager } from '../utils/audioManager';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Music, Volume2 } from 'lucide-react';
 
 interface IntroScreenProps {
   onOpen: () => void;
@@ -10,35 +10,43 @@ interface IntroScreenProps {
 
 export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
   const [isOpening, setIsOpening] = useState(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   useEffect(() => {
-    // Start BGM immediately when visitor opens the website
+    const unsub = audioManager.subscribe((playing) => {
+      setIsPlaying(playing);
+    });
+
+    // Try starting music immediately on mount
     audioManager.playMusic();
 
-    const triggerPlayOnTouch = () => {
+    // Attach interaction fallback listeners to window
+    const handleGesture = () => {
       audioManager.playMusic();
     };
 
-    window.addEventListener('click', triggerPlayOnTouch, { once: true, passive: true });
-    window.addEventListener('touchstart', triggerPlayOnTouch, { once: true, passive: true });
-    window.addEventListener('scroll', triggerPlayOnTouch, { once: true, passive: true });
+    window.addEventListener('click', handleGesture, { once: true, passive: true });
+    window.addEventListener('touchstart', handleGesture, { once: true, passive: true });
+    window.addEventListener('pointerdown', handleGesture, { once: true, passive: true });
 
     return () => {
-      window.removeEventListener('click', triggerPlayOnTouch);
-      window.removeEventListener('touchstart', triggerPlayOnTouch);
-      window.removeEventListener('scroll', triggerPlayOnTouch);
+      unsub();
+      window.removeEventListener('click', handleGesture);
+      window.removeEventListener('touchstart', handleGesture);
+      window.removeEventListener('pointerdown', handleGesture);
     };
   }, []);
 
-  const handleOpenInvitation = () => {
+  const handleOpenInvitation = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsOpening(true);
-    // Ensure BGM is playing immediately
+    // Ensure BGM plays immediately
     audioManager.playMusic();
 
-    // Trigger parent open callback after animation starts
+    // Trigger parent open callback
     setTimeout(() => {
       onOpen();
-    }, 1100);
+    }, 700);
   };
 
   return (
@@ -51,12 +59,37 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
             opacity: 0,
             scale: 1.08,
             filter: 'blur(10px)',
-            transition: { duration: 1.1, ease: [0.65, 0, 0.35, 1] },
+            transition: { duration: 0.8, ease: [0.65, 0, 0.35, 1] },
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#1A0308] via-[#2F0813] to-[#120206] px-4 overflow-hidden"
+          onClick={() => audioManager.playMusic()}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#1A0308] via-[#2F0813] to-[#120206] px-4 overflow-hidden cursor-pointer"
         >
           {/* Subtle Ambient Radial Lighting */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(212,175,55,0.18)_0%,transparent_65%)] pointer-events-none" />
+
+          {/* Top-Right Music Status Badge */}
+          <div className="absolute top-4 right-4 z-20">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                audioManager.togglePlay();
+              }}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-burgundy-900/90 border border-gold/40 text-gold-light hover:border-gold hover:text-white shadow-xl backdrop-blur-md transition-all active:scale-95"
+              title="Toggle Wedding Music"
+            >
+              <Music className={`w-3.5 h-3.5 ${isPlaying ? 'text-gold' : 'text-gold-light'}`} />
+              <span className="text-[11px] font-cinzel font-semibold tracking-wider">
+                {isPlaying ? 'Music Playing' : 'Play Music'}
+              </span>
+              {isPlaying && (
+                <span className="flex items-end gap-0.5 h-3">
+                  <span className="w-0.5 bg-gold rounded-full h-2 animate-[pulse_0.6s_ease-in-out_infinite]" />
+                  <span className="w-0.5 bg-gold-light rounded-full h-3 animate-[pulse_0.8s_ease-in-out_infinite]" />
+                  <span className="w-0.5 bg-gold rounded-full h-1.5 animate-[pulse_0.7s_ease-in-out_infinite]" />
+                </span>
+              )}
+            </button>
+          </div>
 
           {/* Gentle rotating background mandala watermark */}
           <motion.div
@@ -72,7 +105,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.2 }}
-            className="absolute top-0 left-6 md:left-16 origin-top"
+            className="absolute top-0 left-6 md:left-16 origin-top pointer-events-none"
           >
             <motion.div
               animate={{ rotate: [-4, 4, -4] }}
@@ -86,7 +119,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.35 }}
-            className="absolute top-0 right-6 md:right-16 origin-top"
+            className="absolute top-0 right-6 md:right-16 origin-top pointer-events-none"
           >
             <motion.div
               animate={{ rotate: [4, -4, 4] }}
@@ -101,13 +134,17 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.3, ease: 'easeOut' }}
-            className="relative w-full max-w-xl p-6 sm:p-10 md:p-12 text-center rounded-2xl border border-gold/40 bg-burgundy-950/75 backdrop-blur-md shadow-[0_0_60px_rgba(212,175,55,0.22)]"
+            onClick={(e) => {
+              // Clicking anywhere on card ensures music starts
+              audioManager.playMusic();
+            }}
+            className="relative w-full max-w-xl p-6 sm:p-10 md:p-12 text-center rounded-2xl border border-gold/40 bg-burgundy-950/85 backdrop-blur-md shadow-[0_0_60px_rgba(212,175,55,0.22)]"
           >
             {/* Ornamental Corners */}
-            <span className="corner-ornament-tl" />
-            <span className="corner-ornament-tr" />
-            <span className="corner-ornament-bl" />
-            <span className="corner-ornament-br" />
+            <span className="corner-ornament-tl pointer-events-none" />
+            <span className="corner-ornament-tr pointer-events-none" />
+            <span className="corner-ornament-bl pointer-events-none" />
+            <span className="corner-ornament-br pointer-events-none" />
 
             {/* Inner Gold Inset Border */}
             <div className="absolute inset-2 sm:inset-3 border border-gold/20 rounded-xl pointer-events-none" />
@@ -190,7 +227,6 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
                   onClick={handleOpenInvitation}
                   className="group relative inline-flex items-center justify-center px-8 py-3.5 sm:px-10 sm:py-4 overflow-hidden rounded-full font-cinzel text-xs sm:text-sm font-bold tracking-[0.2em] text-burgundy-950 uppercase transition-all duration-300 shadow-[0_6px_25px_rgba(212,175,55,0.45)] hover:shadow-[0_8px_35px_rgba(255,223,115,0.6)] active:scale-95 bg-gradient-to-r from-[#FFF3C4] via-[#E8C15A] to-[#B38B3F] hover:from-[#FFF9E6] hover:to-[#D4AF37]"
                 >
-                  {/* Subtle shimmer sweep across button */}
                   <span className="absolute top-0 left-0 w-1/2 h-full bg-white/35 skew-x-12 animate-shimmer-btn pointer-events-none" />
                   
                   <Sparkles className="w-4 h-4 mr-2 text-burgundy-900 group-hover:rotate-12 transition-transform duration-300" />
@@ -198,9 +234,12 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
                   <Sparkles className="w-4 h-4 ml-2 text-burgundy-900 group-hover:-rotate-12 transition-transform duration-300" />
                 </button>
 
-                <p className="text-[11px] text-gold/70 mt-3 font-poppins tracking-wider">
-                  Tap to unveil the celebration & experience wedding melodies
-                </p>
+                <div className="flex items-center justify-center gap-1.5 mt-3 text-gold/80 text-xs font-poppins">
+                  <Volume2 className="w-3.5 h-3.5 text-gold animate-pulse" />
+                  <span>
+                    {isPlaying ? 'Wedding melodies playing' : 'Tap anywhere to start wedding music'}
+                  </span>
+                </div>
               </motion.div>
             </div>
           </motion.div>
@@ -209,4 +248,3 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
     </AnimatePresence>
   );
 };
-
