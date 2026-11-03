@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GaneshaSVG, HangingBellSVG, MandalaSVG, OrnamentalDivider } from './DecorativeSVGs';
 import { audioManager } from '../utils/audioManager';
@@ -11,11 +11,28 @@ interface IntroScreenProps {
 export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
   const [isOpening, setIsOpening] = useState(false);
 
+  useEffect(() => {
+    // Start BGM immediately when visitor opens the website
+    audioManager.playMusic();
+
+    const triggerPlayOnTouch = () => {
+      audioManager.playMusic();
+    };
+
+    window.addEventListener('click', triggerPlayOnTouch, { once: true, passive: true });
+    window.addEventListener('touchstart', triggerPlayOnTouch, { once: true, passive: true });
+    window.addEventListener('scroll', triggerPlayOnTouch, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener('click', triggerPlayOnTouch);
+      window.removeEventListener('touchstart', triggerPlayOnTouch);
+      window.removeEventListener('scroll', triggerPlayOnTouch);
+    };
+  }, []);
+
   const handleOpenInvitation = () => {
     setIsOpening(true);
-    // Play auspicious opening chime sound
-    audioManager.playOpeningChime();
-    // Start background music gently upon direct user interaction
+    // Ensure BGM is playing immediately
     audioManager.playMusic();
 
     // Trigger parent open callback after animation starts

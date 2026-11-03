@@ -2,59 +2,55 @@ import { Howl } from 'howler';
 
 // Auspicious Wedding Background Music (User BGM)
 const WEDDING_MUSIC_URL = '/audio/bgm.mp3';
-const CHIME_SOUND_URL = 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3';
 
 class WeddingAudioManager {
   private musicHowl: Howl | null = null;
-  private chimeHowl: Howl | null = null;
+  private audioElement: HTMLAudioElement | null = null;
   private isPlaying: boolean = false;
   private isMuted: boolean = false;
   private listeners: Set<(isPlaying: boolean, isMuted: boolean) => void> = new Set();
-  private audioContext: AudioContext | null = null;
+  private gestureListenersAttached: boolean = false;
 
   constructor() {
-    this.initHowler();
-    this.setupAutoPlayOnStart();
+    this.initAudio();
   }
 
-  private setupAutoPlayOnStart() {
+  private initAudio() {
     if (typeof window === 'undefined') return;
 
-    const startAudioOnGesture = () => {
-      this.playMusic();
-      window.removeEventListener('click', startAudioOnGesture);
-      window.removeEventListener('touchstart', startAudioOnGesture);
-      window.removeEventListener('keydown', startAudioOnGesture);
-    };
-
-    window.addEventListener('click', startAudioOnGesture, { once: true });
-    window.addEventListener('touchstart', startAudioOnGesture, { once: true });
-    window.addEventListener('keydown', startAudioOnGesture, { once: true });
-
-    // Try playing immediately if browser allows unprompted audio
-    setTimeout(() => {
-      if (this.musicHowl && !this.isPlaying) {
-        this.playMusic();
-      }
-    }, 400);
-  }
-
-  private initHowler() {
     try {
-      this.chimeHowl = new Howl({
-        src: [CHIME_SOUND_URL],
-        volume: 0.7,
-        html5: true,
+      // Create native HTML5 audio for maximum mobile browser compatibility
+      this.audioElement = new Audio(WEDDING_MUSIC_URL);
+      this.audioElement.loop = true;
+      this.audioElement.volume = 0.65;
+      this.audioElement.preload = 'auto';
+
+      this.audioElement.addEventListener('play', () => {
+        this.isPlaying = true;
+        this.notify();
       });
 
+      this.audioElement.addEventListener('pause', () => {
+        this.isPlaying = false;
+        this.notify();
+      });
+
+      this.audioElement.addEventListener('ended', () => {
+        this.isPlaying = false;
+        this.notify();
+      });
+    } catch (e) {
+      console.warn('Native Audio fallback initialized:', e);
+    }
+
+    try {
+      // Also initialize Howler
       this.musicHowl = new Howl({
         src: [WEDDING_MUSIC_URL],
         html5: true,
         loop: true,
-        volume: 0.45,
-        onloaderror: () => {
-          console.warn('Audio stream failed to load from primary source, fallback available.');
-        },
+        volume: 0.65,
+        autoplay: true,
         onplay: () => {
           this.isPlaying = true;
           this.notify();
@@ -67,86 +63,82 @@ class WeddingAudioManager {
           this.isPlaying = false;
           this.notify();
         },
-        onend: () => {
-          if (!this.musicHowl?.loop()) {
-            this.isPlaying = false;
-            this.notify();
-          }
-        }
       });
     } catch (e) {
-      console.warn('Howler initialization deferred:', e);
+      console.warn('Howler init:', e);
     }
+
+    this.attachAutoStartListeners();
   }
 
-  // Auspicious temple chime sound synthesized or played via Howler
+  private attachAutoStartListeners() {
+    if (typeof window === 'undefined' || this.gestureListenersAttached) return;
+    this.gestureListenersAttached = true;
+
+    // 1. Try immediate playback on load
+    this.playMusic();
+
+    // 2. Attach one-time user interaction listeners to bypass any browser autoplay restrictions
+    const startAudioOnInteraction = () => {
+      this.playMusic();
+      window.removeEventListener('click', startAudioOnInteraction);
+      window.removeEventListener('touchstart', startAudioOnInteraction);
+      window.removeEventListener('pointerdown', startAudioOnInteraction);
+      window.removeEventListener('scroll', startAudioOnInteraction);
+      window.removeEventListener('keydown', startAudioOnInteraction);
+    };
+
+    window.addEventListener('click', startAudioOnInteraction, { once: true, passive: true });
+    window.addEventListener('touchstart', startAudioOnInteraction, { once: true, passive: true });
+    window.addEventListener('pointerdown', startAudioOnInteraction, { once: true, passive: true });
+    window.addEventListener('scroll', startAudioOnInteraction, { once: true, passive: true });
+    window.addEventListener('keydown', startAudioOnInteraction, { once: true, passive: true });
+
+    // Also retry after 300ms and 800ms in case the DOM is still loading
+    setTimeout(() => this.playMusic(), 300);
+    setTimeout(() => this.playMusic(), 800);
+  }
+
+  // Bell / chime completely disabled as per user instruction
   public playOpeningChime() {
-    try {
-      if (this.chimeHowl && this.chimeHowl.state() === 'loaded') {
-        this.chimeHowl.play();
-      } else {
-        this.playSynthesizedBell();
-      }
-    } catch {
-      this.playSynthesizedBell();
-    }
-  }
-
-  // Elegant fallback Web Audio harmonic bell
-  private playSynthesizedBell() {
-    try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      if (!this.audioContext) {
-        this.audioContext = new AudioCtx();
-      }
-      if (this.audioContext.state === 'suspended') {
-        this.audioContext.resume();
-      }
-
-      const frequencies = [587.33, 880, 1174.66, 1760]; // D5 major harmonic bell
-      frequencies.forEach((freq, idx) => {
-        if (!this.audioContext) return;
-        const osc = this.audioContext.createOscillator();
-        const gain = this.audioContext.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, this.audioContext.currentTime);
-
-        gain.gain.setValueAtTime(0.08 / (idx + 1), this.audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, this.audioContext.currentTime + 2.5);
-
-        osc.connect(gain);
-        gain.connect(this.audioContext.destination);
-
-        osc.start();
-        osc.stop(this.audioContext.currentTime + 2.5);
-      });
-    } catch {
-      // Audio playback silently safe
-    }
+    // No-op: Bell sound removed completely
   }
 
   public playMusic() {
-    try {
-      if (this.musicHowl) {
-        if (!this.musicHowl.playing()) {
-          this.musicHowl.play();
-          this.isPlaying = true;
-          this.notify();
-        }
+    if (this.isPlaying) return;
+
+    // Try playing through native Audio element first (most reliable on iOS Safari & Chrome)
+    if (this.audioElement) {
+      this.audioElement.play().then(() => {
+        this.isPlaying = true;
+        this.notify();
+      }).catch(() => {
+        // Autoplay blocked by browser policy until user gesture
+      });
+    }
+
+    // Also trigger Howler
+    if (this.musicHowl && !this.musicHowl.playing()) {
+      try {
+        this.musicHowl.play();
+        this.isPlaying = true;
+        this.notify();
+      } catch {
+        // Waiting for user gesture
       }
-    } catch (e) {
-      console.warn('Could not play music:', e);
     }
   }
 
   public pauseMusic() {
     try {
+      if (this.audioElement) {
+        this.audioElement.pause();
+      }
       if (this.musicHowl && this.musicHowl.playing()) {
         this.musicHowl.pause();
-        this.isPlaying = false;
-        this.notify();
       }
+      this.isPlaying = false;
+      this.notify();
     } catch (e) {
       console.warn('Could not pause music:', e);
     }
@@ -162,6 +154,9 @@ class WeddingAudioManager {
 
   public toggleMute() {
     this.isMuted = !this.isMuted;
+    if (this.audioElement) {
+      this.audioElement.muted = this.isMuted;
+    }
     if (this.musicHowl) {
       this.musicHowl.mute(this.isMuted);
     }
@@ -190,4 +185,3 @@ class WeddingAudioManager {
 }
 
 export const audioManager = new WeddingAudioManager();
-
