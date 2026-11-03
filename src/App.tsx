@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { IntroScreen } from './components/IntroScreen';
 import { HeroSection } from './components/HeroSection';
 import { Countdown } from './components/Countdown';
 import { CoupleSection } from './components/CoupleSection';
@@ -19,15 +18,11 @@ import { initSmoothScroll } from './animations/gsapAnimations';
 import { WEDDING_DATA } from './data/weddingData';
 
 export const App: React.FC = () => {
-  const [hasOpenedInvitation, setHasOpenedInvitation] = useState<boolean>(false);
-
   useEffect(() => {
-    // Initialize Lenis + GSAP scroll integration once the main page is revealed
-    if (hasOpenedInvitation) {
-      const cleanupScroll = initSmoothScroll();
-      return cleanupScroll;
-    }
-  }, [hasOpenedInvitation]);
+    // Initialize Lenis + GSAP smooth scroll
+    const cleanupScroll = initSmoothScroll();
+    return cleanupScroll;
+  }, []);
 
   return (
     <HelmetProvider>
@@ -59,29 +54,25 @@ export const App: React.FC = () => {
           <meta name="twitter:image" content="/og-wedding-invitation.jpg" />
         </Helmet>
 
-        {/* Persistent Floating Music Controller - Active from the start */}
+        {/* Persistent Floating Music Controller */}
         <MusicPlayer />
 
-        {/* Cinematic Intro Screen */}
-        {!hasOpenedInvitation ? (
-          <IntroScreen onOpen={() => setHasOpenedInvitation(true)} />
-        ) : (
-          <main className="relative animate-in fade-in duration-1000">
-            {/* Falling Floral Petals Effect */}
-            <FloatingPetals />
+        {/* Main Wedding Invitation (Directly revealed on link open with background music) */}
+        <main className="relative animate-in fade-in duration-700">
+          {/* Falling Floral Petals Effect */}
+          <FloatingPetals />
 
-            {/* Main Wedding Invitation Sections */}
-            <HeroSection />
-            <Countdown />
-            <CoupleSection />
-            <WeddingDetails />
-            <VenueSection />
-            <WhatsAppShare />
-            <CalendarButton />
-            <FinalSection />
-            <Footer />
-          </main>
-        )}
+          {/* Main Wedding Invitation Sections */}
+          <HeroSection />
+          <Countdown />
+          <CoupleSection />
+          <WeddingDetails />
+          <VenueSection />
+          <WhatsAppShare />
+          <CalendarButton />
+          <FinalSection />
+          <Footer />
+        </main>
 
         {/* Global Notifications */}
         <ToastContainer

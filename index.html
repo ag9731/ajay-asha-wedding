@@ -55,12 +55,12 @@
           }
         }
 
-        const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'mousemove', 'pointermove', 'scroll', 'wheel', 'keydown', 'focus'];
+        const events = ['click', 'touchstart', 'touchend', 'touchmove', 'pointerdown', 'pointerup', 'mousedown', 'mousemove', 'pointermove', 'scroll', 'wheel', 'keydown', 'focus'];
 
         function cleanup() {
           events.forEach(function(evt) {
-            window.removeEventListener(evt, attemptPlay);
-            document.removeEventListener(evt, attemptPlay);
+            window.removeEventListener(evt, attemptPlay, { capture: true });
+            document.removeEventListener(evt, attemptPlay, { capture: true });
           });
         }
 
@@ -71,8 +71,8 @@
         window.addEventListener('focus', attemptPlay);
 
         events.forEach(function(evt) {
-          window.addEventListener(evt, attemptPlay, { passive: true });
-          document.addEventListener(evt, attemptPlay, { passive: true });
+          window.addEventListener(evt, attemptPlay, { passive: true, capture: true });
+          document.addEventListener(evt, attemptPlay, { passive: true, capture: true });
         });
       })();
     </script>
