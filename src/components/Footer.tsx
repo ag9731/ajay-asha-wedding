@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
 
         <div className="space-y-1">
           <p className="font-cinzel text-xs text-gold-light font-bold tracking-widest uppercase">
-            {WEDDING_DATA.groom.family} & {WEDDING_DATA.bride.family}
+            {WEDDING_DATA.bride.family} & {WEDDING_DATA.groom.family}
           </p>
           <p className="text-[11px] text-champagne/60 tracking-wider">
             Celebrating the sacred wedding of {WEDDING_DATA.couplesNames}

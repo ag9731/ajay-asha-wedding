@@ -158,11 +158,11 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onOpen }) => {
                 className="space-y-1.5 my-2"
               >
                 <h3 className="font-cinzel font-bold text-base sm:text-lg md:text-xl text-gold-gradient tracking-[0.2em]">
-                  GORAVANAKOLL FAMILY
+                  RATIMANI FAMILY
                 </h3>
                 <div className="text-gold-light font-great-vibes text-2xl sm:text-3xl">&</div>
                 <h3 className="font-cinzel font-bold text-base sm:text-lg md:text-xl text-gold-gradient tracking-[0.2em]">
-                  RATIMANI FAMILY
+                  GORAVANAKOLL FAMILY
                 </h3>
               </motion.div>
 

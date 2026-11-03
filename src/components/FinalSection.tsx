@@ -73,11 +73,11 @@ export const FinalSection: React.FC = () => {
           </p>
 
           <h3 className="font-cinzel text-base sm:text-xl font-bold text-gold-gradient tracking-[0.2em] uppercase my-1">
-            {WEDDING_DATA.groom.family}
+            {WEDDING_DATA.bride.family}
           </h3>
           <div className="font-great-vibes text-gold-light text-2xl my-0.5">&</div>
           <h3 className="font-cinzel text-base sm:text-xl font-bold text-gold-gradient tracking-[0.2em] uppercase my-1">
-            {WEDDING_DATA.bride.family}
+            {WEDDING_DATA.groom.family}
           </h3>
 
           <div className="my-4 flex items-center justify-center gap-2">

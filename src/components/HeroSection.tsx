@@ -61,11 +61,11 @@ export const HeroSection: React.FC = () => {
         {/* Both Families Prominently Represented */}
         <motion.div variants={fadeInUp} className="my-2 space-y-1">
           <h2 className="font-cinzel text-base sm:text-xl md:text-2xl font-bold tracking-[0.25em] text-gold-gradient uppercase">
-            {WEDDING_DATA.groom.family}
+            {WEDDING_DATA.bride.family}
           </h2>
           <div className="font-great-vibes text-gold-light text-2xl sm:text-3xl">&</div>
           <h2 className="font-cinzel text-base sm:text-xl md:text-2xl font-bold tracking-[0.25em] text-gold-gradient uppercase">
-            {WEDDING_DATA.bride.family}
+            {WEDDING_DATA.groom.family}
           </h2>
         </motion.div>
 

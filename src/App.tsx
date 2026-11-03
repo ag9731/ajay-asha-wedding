@@ -37,14 +37,14 @@ export const App: React.FC = () => {
           <title>Wedding Invitation – Ajay & Asha</title>
           <meta
             name="description"
-            content="Goravanakoll Family & Ratimani Family warmly invite you to celebrate the wedding of Ajay & Asha. Sunday, 29 November 2026, 12:31 PM at Vidyadhiraj Bhavan, Hubballi."
+            content="Ratimani Family & Goravanakoll Family warmly invite you to celebrate the wedding of Ajay & Asha. Sunday, 29 November 2026, 12:31 PM at Vidyadhiraj Bhavan, Hubballi."
           />
           {/* Open Graph / WhatsApp */}
           <meta property="og:type" content="website" />
           <meta property="og:title" content="Wedding Invitation – Ajay & Asha" />
           <meta
             property="og:description"
-            content="Goravanakoll Family & Ratimani Family warmly invite you to celebrate the wedding of Ajay & Asha. Sunday, 29 November 2026, 12:31 PM at Vidyadhiraj Bhavan, Hubballi."
+            content="Ratimani Family & Goravanakoll Family warmly invite you to celebrate the wedding of Ajay & Asha. Sunday, 29 November 2026, 12:31 PM at Vidyadhiraj Bhavan, Hubballi."
           />
           <meta property="og:image" content="/og-wedding-invitation.jpg" />
           <meta property="og:site_name" content="Ajay & Asha Wedding Invitation" />
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
           <meta name="twitter:title" content="Wedding Invitation – Ajay & Asha" />
           <meta
             name="twitter:description"
-            content="Goravanakoll Family & Ratimani Family warmly invite you to celebrate the wedding of Ajay & Asha."
+            content="Ratimani Family & Goravanakoll Family warmly invite you to celebrate the wedding of Ajay & Asha."
           />
           <meta name="twitter:image" content="/og-wedding-invitation.jpg" />
         </Helmet>

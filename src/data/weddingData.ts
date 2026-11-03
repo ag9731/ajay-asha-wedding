@@ -64,7 +64,7 @@ export const WEDDING_DATA = {
   },
 
   invitationMessage: 
-    "With the blessings of Almighty and our beloved elders, the Goravanakoll Family and Ratimani Family joyfully invite you to celebrate the wedding of Ajay & Asha.",
+    "With the blessings of Almighty and our beloved elders, the Ratimani Family and Goravanakoll Family joyfully invite you to celebrate the wedding of Ajay & Asha.",
 
   closingMessage:
     "We warmly invite you and your family to grace this auspicious occasion with your presence, blessings and good wishes.",
@@ -74,7 +74,7 @@ export const WEDDING_DATA = {
 
   signatures: {
     salutation: "With love and blessings,",
-    families: "Goravanakoll Family & Ratimani Family",
+    families: "Ratimani Family & Goravanakoll Family",
     couple: "Ajay & Asha"
   },
 
@@ -97,7 +97,7 @@ export const WEDDING_DATA = {
       venueAddress: "Amargol, Behind Volkswagen Car Showroom, Hubballi – 580031",
       description: "The sacred saat phere and mangalsutra dharana rituals uniting two loving souls with the blessings of fire and elders.",
       iconName: "Flame",
-      dressCode: "Traditional South Indian / Ethnic Festive"
+      customNote: "Your Presence, Our Happiness"
     },
     {
       id: "reception",
@@ -154,7 +154,7 @@ export const WEDDING_DATA = {
   ],
 
   whatsappShare: {
-    rawMessage: `With immense joy, the Goravanakoll Family and Ratimani Family invite you to celebrate the wedding of Ajay & Asha.
+    rawMessage: `With immense joy, the Ratimani Family and Goravanakoll Family invite you to celebrate the wedding of Ajay & Asha.
 
 Date: Sunday, 29 November 2026
 Muhurtham: 12:31 PM
@@ -167,7 +167,7 @@ View Wedding Invitation: `
 
   calendarDetails: {
     title: "Wedding of Ajay & Asha",
-    description: "Goravanakoll Family & Ratimani Family joyfully invite you to the auspicious wedding celebration of Ajay & Asha at Vidyadhiraj Bhavan, Hubballi.",
+    description: "Ratimani Family & Goravanakoll Family joyfully invite you to the auspicious wedding celebration of Ajay & Asha at Vidyadhiraj Bhavan, Hubballi.",
     location: "Vidyadhiraj Bhavan, Amargol, Behind Volkswagen Car Showroom, Hubballi – 580031",
     // 29 Nov 2026 12:31 PM IST is 07:01 AM UTC
     startTimeUTC: "20261129T070100Z",

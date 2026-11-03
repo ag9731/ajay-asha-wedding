@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { WEDDING_DATA } from '../data/weddingData';
 import { OrnamentalDivider } from './DecorativeSVGs';
-import { Calendar, Clock, MapPin, Sparkles, Flame, Shirt, Heart } from 'lucide-react';
+import { Calendar, Clock, MapPin, Sparkles, Flame, Heart } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../animations/motionVariants';
 
 export const WeddingDetails: React.FC = () => {
@@ -94,13 +94,6 @@ export const WeddingDetails: React.FC = () => {
                     <strong>{event.venueName}</strong>, {event.venueAddress}
                   </span>
                 </div>
-
-                {event.dressCode && (
-                  <div className="flex items-center gap-2.5 pt-1 text-gold/90">
-                    <Shirt className="w-4 h-4 text-gold shrink-0" />
-                    <span className="text-xs">Dress Code: {event.dressCode}</span>
-                  </div>
-                )}
 
                 {event.customNote && (
                   <div className="flex items-center gap-2.5 pt-1 text-gold/90">
